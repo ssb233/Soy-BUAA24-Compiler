@@ -1,0 +1,10 @@
+22373526
+test add 2
+add result is 4
+test add 1
+add one result is 4
+test if exp
+compare result is b
+1
+1
+1
