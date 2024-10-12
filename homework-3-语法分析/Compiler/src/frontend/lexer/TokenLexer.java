@@ -12,9 +12,9 @@ public class TokenLexer {
     private BufferedReader bufferedReader;
     private int lineNum = 0;
     private int columnNum = 0;
-    private List<Token> tokenList;
-    private List<String> sourceCode;
-    private List<Token> errorList;
+    private ArrayList<Token> tokenList;
+    private ArrayList<String> sourceCode;
+    private ArrayList<Token> errorList;
     private boolean isCorrect = true;//默认语法解析正确
 
     public TokenLexer(BufferedReader bufferedReader) {
@@ -172,6 +172,9 @@ public class TokenLexer {
                                 columnNum--;
                                 Token eToken = new Token(null, "a", lineNum, -1);
                                 errorList.add(eToken);
+                                //为了语法分析跳过此法分析错误，这里要加一个正确的token
+                                tokenString+="&";//这个在末尾会被加进去
+                                //
                                 isCorrect = false;
                             }
                             break;
@@ -183,6 +186,9 @@ public class TokenLexer {
                                 columnNum--;
                                 Token eToken = new Token(null, "a", lineNum, -1);
                                 errorList.add(eToken);
+                                //为了语法分析跳过此法分析错误，这里要加一个正确的token
+                                tokenString+="|";
+                                //
                                 isCorrect = false;
                             }
                             break;
@@ -246,8 +252,8 @@ public class TokenLexer {
     public boolean getIsCorrect(){
         return isCorrect;
     }
-    public List<Token> getTokenList(){return tokenList;}
-    public List<Token> getErrorList(){return errorList;}
+    public ArrayList<Token> getTokenList(){return tokenList;}
+    public ArrayList<Token> getErrorList(){return errorList;}
     public void outputTokenList(){
         for(Token token:tokenList){
 //            if(token.getTokenTypeName().equals("INTCON")){
