@@ -195,22 +195,32 @@ public class StmtParser {
         }
         else {//都是以ident开头，需要区分exp，LVal
             GlobalParm.backAToken();
-            int count = 0;
-            token = GlobalParm.getAToken();
-            count++;
+            token = GlobalParm.getCurrentToken();//为当前的token做一个标记，确保后续能够回退到当前标记
+            long flag = 114514;
+            String flagTokenType = token.getTokenTypeName();
+            token.setNumValue(flag);//特殊标记作为回退位置
+            int len = GlobalParm.getParserErrorList().size();//还要处理在回溯过程中，可能有错误，需要把错误也回溯了，避免重复错误
+
             boolean isAssign = false;
-            while(!token.getTokenTypeName().equals("SEMICN")){
-                if(token.getTokenTypeName().equals("ASSIGN")){
-                    isAssign = true;break;
-                }
-                token = GlobalParm.getAToken();
-                count++;
-            }//跳出后，判断是否有ASSIGN
-            while(count>0){//回退所有多读的token
+            this.lVal = new LValParser().LValParser();//不论是LVal还是exp，这里一定都是一个LVal，先解析，然后看他后面是不是ASSIGN
+            token = GlobalParm.getAToken();
+            if(token.getTokenTypeName().equals("ASSIGN")){
+                isAssign = true;
                 GlobalParm.backAToken();
-                count--;
             }
-            if(isAssign){//LVal部分
+            //这里之前都是为了弄清楚到底是exp还是lval
+            //所以弄清楚后，不论怎么样，都要回退掉这个lval
+            while(GlobalParm.getCurrentToken().getNumValue()!=flag||!GlobalParm.getCurrentToken().getTokenTypeName().equals(flagTokenType)){
+                GlobalParm.backAToken();
+            }//到这完成lval的回退任务
+            //还要把lval设置为null
+            this.lVal = null;
+            //还要回退错误
+            while(len<GlobalParm.getParserErrorList().size()){
+                GlobalParm.getRidParserError();
+            }//完成对错误的回退
+
+            if(isAssign){//LVal部分,这次一定是LVAL了
                 LValParser lValParser = new LValParser();
                 this.lVal = lValParser.LValParser();
                 token = GlobalParm.getAToken();
@@ -257,7 +267,7 @@ public class StmtParser {
                         GlobalParm.addParserError(eToken);
                     }
                 }
-                //末尾分号和下面留着一起判断吧
+
             }else{//exp情况
                 this.exp = new ExpParser().ExpParser();
 

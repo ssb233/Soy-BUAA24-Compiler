@@ -39,10 +39,14 @@ public class GlobalParm {
     public static void addParserError(Token token){
         GlobalParm.parserErrorList.add(token);
     }
+    public static void getRidParserError(){
+        GlobalParm.parserErrorList.remove(GlobalParm.parserErrorList.size()-1);
+    }
     public static Token getCurrentToken(){
         return tokenList.get(tokenIter);
     }
     public static ArrayList<Token> getParserErrorList(){
         return GlobalParm.parserErrorList;
     }
+
 }

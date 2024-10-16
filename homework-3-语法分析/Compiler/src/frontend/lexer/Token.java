@@ -22,6 +22,10 @@ public class Token implements parserOutput {
     public String getTokenValue(){return tokenValue;}
     public int getLineNum(){return lineNum;}
 
+    public void setNumValue(long flag){
+        this.numValue = flag;
+    }
+
     @Override
     public String output() {
         StringBuilder stringBuilder = new StringBuilder();

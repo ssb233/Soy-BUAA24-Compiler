@@ -15,7 +15,11 @@ public class LVal extends PrimaryExpExtend implements parserOutput {
         this.LBRACK = LBRACK;
         this.RBRACK = RBRACK;
     }
-
+    public Token getRBRACK(){return this.RBRACK;}
+    public Token getLBRACK(){return this.LBRACK;}
+    public Ident getIdent(){
+        return this.ident;
+    }
     @Override
     public String output() {
        StringBuilder stringBuilder = new StringBuilder();
