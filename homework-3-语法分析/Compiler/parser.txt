@@ -3,18 +3,23 @@ MAINTK main
 LPARENT (
 RPARENT )
 LBRACE {
+CHARTK char
 IDENFR a
-<LVal>
-ASSIGN =
-INTCON 1
+LBRACK [
+INTCON 100
 <Number>
 <PrimaryExp>
 <UnaryExp>
 <MulExp>
 <AddExp>
-<Exp>
+<ConstExp>
+RBRACK ]
+ASSIGN =
+STRCON "123\n123\\\""
+<InitVal>
+<VarDef>
 SEMICN ;
-<Stmt>
+<VarDecl>
 RETURNTK return
 INTCON 0
 <Number>
